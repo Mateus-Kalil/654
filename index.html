@@ -1,0 +1,2350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. Lucas Candelaria Kalil | Clínica Médica</title>
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <style>
+    :root {
+      --primary: #0077cc;
+      --secondary: #00a8ff;
+      --accent: #00eeff;
+      --light: #f0f8ff;
+      --dark: #1a1a2e;
+      --glass: rgba(255, 255, 255, 0.1);
+      --glass-dark: rgba(26, 26, 46, 0.8);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --neon-glow: 0 0 5px rgba(0, 238, 255, 0.5);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--dark), #0a0a1a);
+      color: var(--light);
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    #particles-js-main {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    @font-face {
+      font-family: 'Poppins';
+      src: url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem 0;
+      z-index: 1000;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+      background: rgba(26, 26, 46, 0.8);
+    }
+    
+    header.scrolled {
+      padding: 1rem 0;
+      background: var(--glass-dark);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo span {
+      color: var(--accent);
+      margin-left: 0.5rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin-left: 2rem;
+    }
+    
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: var(--transition);
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background: var(--light);
+      margin: 5px;
+      transition: var(--transition);
+    }
+    
+    /* Hero Section */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    #particles-js {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s forwards 0.5s;
+    }
+    
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .hero-title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: var(--accent);
+      font-weight: 300;
+    }
+    
+    .hero-cta {
+      padding: 1rem 2.5rem;
+      background: var(--primary);
+      color: var(--light);
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      display: inline-block;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--secondary);
+      transition: var(--transition);
+      z-index: -1;
+      border-radius: 50px;
+    }
+    
+    .hero-cta:hover::before {
+      width: 100%;
+    }
+    
+    .hero-cta:hover {
+      box-shadow: var(--neon-glow);
+      transform: translateY(-3px);
+    }
+    
+    /* About Section */
+    #about {
+      padding: 8rem 0;
+      position: relative;
+      background-image: url("https://plus.unsplash.com/premium_photo-1661615048119-f905a7e5e234");
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+    }
+    
+    .about-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(26, 26, 46, 0.9);
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+      color: var(--light);
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+    }
+    
+    .about-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .about-info {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transform: translateY(50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .about-info.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .about-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+    }
+    
+    .about-info p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    .info-item {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .info-item i {
+      margin-right: 1rem;
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    
+    .info-item span {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    
+    .about-model {
+      position: relative;
+      height: 400px;
+      width: 100%;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .about-model.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    /* Education Section */
+    #education {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+    }
+    
+    .education-content {
+      position: relative;
+    }
+    
+    .education-timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+    
+    .education-timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: var(--accent);
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      width: 100%;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .timeline-item.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .timeline-item:nth-child(odd) {
+      padding-right: calc(50% + 2rem);
+      text-align: right;
+    }
+    
+    .timeline-item:nth-child(even) {
+      padding-left: calc(50% + 2rem);
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      z-index: 2;
+    }
+    
+    .timeline-dot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: var(--dark);
+      border-radius: 50%;
+    }
+    
+    .timeline-content {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .timeline-year {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      background: var(--accent);
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    
+    .timeline-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+    }
+    
+    .timeline-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Residency Section */
+    #residency {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #16213e, #0f3460);
+    }
+    
+    .residency-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .residency-card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: var(--transition);
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    
+    .residency-card.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .residency-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .residency-card i {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    
+    .residency-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+    
+    .residency-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+    }
+    
+    .residency-position {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      background: var(--primary);
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--light);
+    }
+    
+    /* Awards Section */
+    #awards {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #0f3460, #1a1a2e);
+    }
+    
+    .awards-content {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .award-item {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      transition: var(--transition);
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    
+    .award-item.show {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    .award-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .award-icon {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    
+    .award-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+    
+    .award-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Activities Section */
+    #activities {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+    }
+    
+    .activities-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .tab-btn {
+      padding: 0.8rem 1.5rem;
+      background: var(--glass);
+      border: none;
+      color: var(--light);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin: 0 0.5rem;
+      border-radius: 5px;
+      position: relative;
+    }
+    
+    .tab-btn.active {
+      background: var(--primary);
+      color: var(--light);
+    }
+    
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid var(--primary);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s forwards;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .activity-card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+    
+    .activity-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .activity-icon {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    
+    .activity-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+    
+    .activity-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+    }
+    
+    .activity-date {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    
+    /* Scientific Section */
+    #scientific {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #16213e, #0f3460);
+    }
+    
+    .scientific-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .publication-item {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      transform: translateX(-50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .publication-item.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    
+    .publication-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+    
+    .publication-authors {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .publication-journal {
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    
+    .publication-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    
+    .publication-link:hover {
+      color: var(--accent);
+    }
+    
+    /* Teaching Section */
+    #teaching {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #0f3460, #1a1a2e);
+    }
+    
+    .teaching-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .teaching-card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    
+    .teaching-card.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .teaching-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .teaching-icon {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    
+    .teaching-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+    
+    .teaching-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+    }
+    
+    .teaching-institution {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    
+    /* Student Activities Section */
+    #student {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+    }
+    
+    .student-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .student-item {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      transform: translateX(50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .student-item.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    
+    .student-icon {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-right: 2rem;
+    }
+    
+    .student-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+    }
+    
+    .student-info p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 0.5rem;
+    }
+    
+    .student-year {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    
+    /* Teleconsulta Section */
+    #teleconsulta {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #16213e, #0f3460);
+    }
+    
+    .teleconsulta-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .teleconsulta-info {
+      transform: translateX(-50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .teleconsulta-info.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    
+    .teleconsulta-info h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+    }
+    
+    .teleconsulta-info p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1.5rem;
+    }
+    
+    .teleconsulta-features {
+      margin-bottom: 2rem;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-item i {
+      font-size: 1.3rem;
+      color: var(--accent);
+      margin-right: 1rem;
+    }
+    
+    .feature-item p {
+      font-size: 0.95rem;
+      margin-bottom: 0;
+    }
+    
+    .form-container {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transform: translateX(50px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .form-container.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    
+    .form-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      color: var(--light);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      color: var(--light);
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent);
+    }
+    
+    .recaptcha {
+      margin-bottom: 1.5rem;
+      width: 100%;
+      height: 78px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .recaptcha-checkbox {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .recaptcha-checkbox.checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    
+    .recaptcha-text {
+      margin-left: 1rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .submit-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
+      box-shadow: var(--neon-glow);
+    }
+    
+    /* Footer */
+    footer {
+      background: rgba(26, 26, 46, 0.5);
+      padding: 4rem 0 2rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--light);
+      text-decoration: none;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    
+    .footer-logo span {
+      color: var(--accent);
+    }
+    
+    .footer-about p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-title {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+      position: relative;
+    }
+    
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      background: var(--accent);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: var(--transition);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .footer-links a i {
+      margin-right: 0.5rem;
+      color: var(--accent);
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+      transform: translateX(5px);
+    }
+    
+    .contact-info {
+      list-style: none;
+    }
+    
+    .contact-info li {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .contact-info i {
+      margin-right: 1rem;
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    
+    .contact-info p {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
+      text-align: center;
+    }
+    
+    .footer-bottom p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .footer-bottom a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    /* Animations & Hover Effects */
+    .glitch-effect {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .glitch-effect::before,
+    .glitch-effect::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.8;
+    }
+    
+    .glitch-effect::before {
+      color: var(--accent);
+      z-index: -1;
+      animation: glitch-animate 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+      animation-delay: 0.1s;
+    }
+    
+    .glitch-effect::after {
+      color: var(--secondary);
+      z-index: -2;
+      animation: glitch-animate 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+      animation-delay: 0.2s;
+    }
+    
+    @keyframes glitch-animate {
+      0% {
+        transform: translate(0);
+      }
+      20% {
+        transform: translate(-3px, 3px);
+      }
+      40% {
+        transform: translate(-3px, -3px);
+      }
+      60% {
+        transform: translate(3px, 3px);
+      }
+      80% {
+        transform: translate(3px, -3px);
+      }
+      100% {
+        transform: translate(0);
+      }
+    }
+    
+    /* ECG Animation */
+    .ecg-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      overflow: hidden;
+      opacity: 0.2;
+    }
+    
+    .ecg-line {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-linecap: round;
+      animation: ecg-animate 3s linear infinite;
+    }
+    
+    @keyframes ecg-animate {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-300px);
+      }
+    }
+    
+    /* Floating Particles */
+    .floating-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 238, 255, 0.5);
+      box-shadow: 0 0 10px rgba(0, 238, 255, 0.5);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+    
+    .section-divider {
+      position: relative;
+      height: 50px;
+      margin-top: -25px;
+      margin-bottom: -25px;
+      z-index: 10;
+      overflow: hidden;
+    }
+    
+    .section-divider svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 50px;
+      transform: rotateY(180deg);
+    }
+    
+    .section-divider .shape-fill {
+      fill: rgba(0, 238, 255, 0.1);
+    }
+    
+    /* Media Queries */
+    @media screen and (max-width: 992px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .about-content,
+      .teleconsulta-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .timeline-item:nth-child(odd),
+      .timeline-item:nth-child(even) {
+        padding: 0 0 0 3rem;
+        text-align: left;
+      }
+      
+      .timeline-dot {
+        left: 0;
+      }
+      
+      .education-timeline::before {
+        left: 0;
+      }
+    }
+    
+    @media screen and (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 80%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: var(--glass-dark);
+        backdrop-filter: blur(10px);
+        transition: var(--transition);
+      }
+      
+      .nav-links.active {
+        right: 0;
+      }
+      
+      .nav-links li {
+        margin: 1.5rem 0;
+      }
+      
+      .hamburger.active .line1 {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+      
+      .hamburger.active .line2 {
+        opacity: 0;
+      }
+      
+      .hamburger.active .line3 {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .student-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .student-icon {
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+      }
+    }
+    
+    @media screen and (max-width: 576px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .timeline-content {
+        padding: 1rem;
+      }
+      
+      .timeline-title {
+        font-size: 1.1rem;
+      }
+      
+      .publication-title {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header id="header">
+    <div class="container">
+      <nav>
+        <a href="#" class="logo">Dr. <span>Lucas Kalil</span></a>
+        <ul class="nav-links">
+          <li><a href="#hero">Início</a></li>
+          <li><a href="#about">Sobre</a></li>
+          <li><a href="#education">Formação</a></li>
+          <li><a href="#residency">Residência</a></li>
+          <li><a href="#awards">Premiações</a></li>
+          <li><a href="#activities">Atividades</a></li>
+          <li><a href="#scientific">Científico</a></li>
+          <li><a href="#teleconsulta">Teleconsulta</a></li>
+        </ul>
+        <div class="hamburger">
+          <div class="line1"></div>
+          <div class="line2"></div>
+          <div class="line3"></div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <div id="particles-js"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Dr. Lucas Candelaria Kalil</h1>
+      <h2 class="hero-subtitle" data-text="Medicina com excelência, ciência e dedicação">Medicina com excelência, ciência e dedicação</h2>
+      <a href="#teleconsulta" class="hero-cta">Agendar Teleconsulta</a>
+    </div>
+    <div id="threejs-container"></div>
+  </section>
+  
+  <div id="particles-js-main"></div>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">Sobre</h2>
+      <div class="about-content">
+        <div class="about-info">
+          <h3>Informações Pessoais</h3>
+          <div class="info-item">
+            <i class="fas fa-user"></i>
+            <div>
+              <span>Nome:</span> Lucas Candelaria Kalil
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar"></i>
+            <div>
+              <span>Data de Nascimento:</span> 07/12/1998
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <span>Naturalidade:</span> São Paulo - SP
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-flag"></i>
+            <div>
+              <span>Nacionalidade:</span> Brasileiro
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-ring"></i>
+            <div>
+              <span>Estado Civil:</span> Solteiro
+            </div>
+          </div>
+          <h3>Contato</h3>
+          <div class="info-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <span>Celular:</span> (11) 97240-8892
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <span>E-mail:</span> lucasckalil12@hotmail.com
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-home"></i>
+            <div>
+              <span>Endereço:</span> Rua Oscar Freire, 1702, Pinheiros, São Paulo - CEP: 05409-011
+            </div>
+          </div>
+        </div>
+        <div class="about-model" id="dna-model"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section id="education">
+    <div class="container">
+      <h2 class="section-title">Formação Acadêmica</h2>
+      <div class="education-content">
+        <div class="education-timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <span class="timeline-year">2019 - 2024</span>
+              <h3 class="timeline-title">Graduação em Medicina</h3>
+              <p class="timeline-description">Faculdade de Medicina de Ribeirão Preto - Universidade de São Paulo (FMRP-USP)</p>
+              <p class="timeline-description">Carga horária total: 9.075 horas</p>
+              <p class="timeline-description">7º colocado entre 99 alunos</p>
+              <p class="timeline-description">Média ponderada: 8.9 | Média aritmética: 8.17</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <span class="timeline-year">2023 - 2024</span>
+              <h3 class="timeline-title">Internato Médico</h3>
+              <p class="timeline-description">Hospital das Clínicas da Faculdade de Medicina de Ribeirão Preto - USP</p>
+              <p class="timeline-description">Carga horária total: 3.510 horas</p>
+              <p class="timeline-description">Duração: 4 semestres</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Residency Section -->
+  <section id="residency">
+    <div class="container">
+      <h2 class="section-title">Residência Médica</h2>
+      <div class="residency-content">
+        <div class="residency-card">
+          <i class="fas fa-hospital"></i>
+          <h3>HC-FMUSP</h3>
+          <p>Hospital das Clínicas da Faculdade de Medicina da USP</p>
+          <span class="residency-position">6º lugar</span>
+          <p>Matrícula em 10/02/2025</p>
+        </div>
+        <div class="residency-card">
+          <i class="fas fa-hospital-alt"></i>
+          <h3>HCFMRP-USP</h3>
+          <p>Hospital das Clínicas da Faculdade de Medicina de Ribeirão Preto da USP</p>
+          <span class="residency-position">Aprovado</span>
+        </div>
+        <div class="residency-card">
+          <i class="fas fa-hospital-user"></i>
+          <h3>Hospital Sírio Libanês</h3>
+          <p>Processo seletivo não finalizado</p>
+          <span class="residency-position">2º lugar</span>
+        </div>
+        <div class="residency-card">
+          <i class="fas fa-hospitals"></i>
+          <h3>Hospital Israelita Albert Einstein</h3>
+          <p>Processo seletivo não finalizado</p>
+          <span class="residency-position">23º lugar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards Section -->
+  <section id="awards">
+    <div class="container">
+      <h2 class="section-title">Premiações</h2>
+      <div class="awards-content">
+        <div class="award-item">
+          <div class="award-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <h3 class="award-title">Prêmio Doutor Hélio Lourenço de Oliveira</h3>
+          <p class="award-description">Concedido ao aluno que mais se distinguiu nas atividades desenvolvidas pelo departamento de Clínica Médica pela Faculdade de Medicina de Ribeirão Preto da Universidade de São Paulo em 2024.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activities Section -->
+  <section id="activities">
+    <div class="container">
+      <h2 class="section-title">Atividades Assistenciais</h2>
+      <div class="activities-tabs">
+        <button class="tab-btn active" data-tab="tab1">Ligas Acadêmicas</button>
+        <button class="tab-btn" data-tab="tab2">Estágios</button>
+        <button class="tab-btn" data-tab="tab3">Testes de Progresso</button>
+      </div>
+      <div class="activities-content">
+        <div class="tab-content active" id="tab1">
+          <div class="activity-grid">
+            <div class="activity-card">
+              <div class="activity-icon">
+                <i class="fas fa-bone"></i>
+              </div>
+              <h3 class="activity-title">Liga Acadêmica de Ortopedia e Traumatologia</h3>
+              <p class="activity-description">Diretor de Ensino da Liga Acadêmica de Ortopedia e Traumatologia (LOT) da FMRP-USP.</p>
+              <p class="activity-date">Janeiro/2021 - Maio/2023</p>
+            </div>
+            <div class="activity-card">
+              <div class="activity-icon">
+                <i class="fas fa-procedures"></i>
+              </div>
+              <h3 class="activity-title">Liga Acadêmica de Medicina Intensiva</h3>
+              <p class="activity-description">Diretor de Ensino da Liga Acadêmica de Medicina Intensiva (LAMIT) da FMRP-USP.</p>
+              <p class="activity-date">Dezembro/2021 - Dezembro/2022</p>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="tab2">
+          <div class="activity-grid">
+            <div class="activity-card">
+              <div class="activity-icon">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <h3 class="activity-title">Centro de Terapia Intensiva</h3>
+              <p class="activity-description">Estágio Optativo no Centro de Terapia Intensiva da Unidade de Emergência do HCFMRP-USP.</p>
+              <p class="activity-date">Dezembro/2022</p>
+            </div>
+            <div class="activity-card">
+              <div class="activity-icon">
+                <i class="fas fa-ambulance"></i>
+              </div>
+              <h3 class="activity-title">Sala Vermelha</h3>
+              <p class="activity-description">Estágio Optativo nos atendimentos de urgência e emergência na Sala Vermelha da Unidade de Emergência do HCRP-USP.</p>
+              <p class="activity-date">Novembro/2023</p>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="tab3">
+          <div class="activity-grid">
+            <div class="activity-card">
+              <div class="activity-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3 class="activity-title">Testes de Progresso</h3>
+              <p class="activity-description">Participação em 7 testes de progresso organizados pelo Núcleo Interinstitucional de Ensino e Prática de Avaliação em Educação Médica e pela Associação Brasileira de Educação Médica.</p>
+              <p class="activity-date">2020 - 2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scientific Section -->
+  <section id="scientific">
+    <div class="container">
+      <h2 class="section-title">Atividades Científicas</h2>
+      <div class="scientific-content">
+        <div class="publication-item">
+          <h3 class="publication-title">Iniciação Científica (PIBIC)</h3>
+          <p class="publication-authors">Projeto: "Ecocardiografia identifica alterações geométricas e funcionais cardíacas em pacientes assintomáticos com Lipodistrofia Parcial Familiar"</p>
+          <p class="publication-journal">Período: 1º de setembro de 2022 a 31 de agosto de 2023</p>
+          <p class="publication-journal">Carga horária: 512 horas</p>
+          <p>Orientadora: Profa. Dra. Minna Moreira Dias Romano</p>
+        </div>
+        <div class="publication-item">
+          <h3 class="publication-title">Artigo Publicado</h3>
+          <p class="publication-authors">Romano MMD, Sapalo AT, Guidorizzi NR, Moreira HT, Inês PAC, Kalil LC, Foss MC, Paula FJA.</p>
+          <p class="publication-journal">Echocardiographic Alterations of Cardiac Geometry and Function in Patients with Familial Partial Lipodystrophy. Arq Bras Cardiol. 2024</p>
+          <p>PMID: 38922260 | PMCID: PMC11216334</p>
+        </div>
+        <div class="publication-item">
+          <h3 class="publication-title">Apresentações em Congressos</h3>
+          <p class="publication-authors">43º Congresso da Sociedade de Cardiologia do Estado de São Paulo. São Paulo/SP, junho/2023.</p>
+          <p class="publication-authors">European Society Of Cardiology. Barcelona/Espanha, maio/2023.</p>
+        </div>
+        <div class="publication-item">
+          <h3 class="publication-title">Capítulo de Livro</h3>
+          <p class="publication-authors">KALIL, Lucas. Capítulo: A modulação da marcha no cotidiano.</p>
+          <p class="publication-journal">In: CAIRASCO, Norberto Garcia (Coord.). Neurociência Crítica e Criativa nos Tempos da Pandemia do Covid-19. 1. ed. Ribeirão Preto: USP, 2021. p. 170-173.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching Section -->
+  <section id="teaching">
+    <div class="container">
+      <h2 class="section-title">Atividades de Ensino</h2>
+      <div class="teaching-content">
+        <div class="teaching-card">
+          <div class="teaching-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h3 class="teaching-title">Monitoria em Cardiologia</h3>
+          <p class="teaching-description">Monitoria voluntária na disciplina da graduação Cardiologia, junto ao Departamento de Clínica Médica da FMRP-USP.</p>
+          <p class="teaching-institution">2023</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="teaching-title">ACLS: Suporte Avançado de Vida em Cardiologia</h3>
+          <p class="teaching-description">American Heart Association, com realização e gestão por parte da FAEPA.</p>
+          <p class="teaching-institution">Outubro/2024</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-icon">
+            <i class="fas fa-child"></i>
+          </div>
+          <h3 class="teaching-title">PALS: Pediatric Advanced Life Support</h3>
+          <p class="teaching-description">Promovido por Save a Life Certification, da National Health Care Provider Solutions (NHCPS).</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3 class="teaching-title">NIH Stroke Scale</h3>
+          <p class="teaching-description">Curso "NIH STROKE SCALE - English Group A-V5" - plataforma online da National Institute of Health.</p>
+          <p class="teaching-institution">2022</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-icon">
+            <i class="fas fa-bed"></i>
+          </div>
+          <h3 class="teaching-title">Curso de Medicina do Sono</h3>
+          <p class="teaching-description">Plataforma online VEDUCA, como complementação da disciplina de Sistema Nervoso do Departamento de Neurociências e Ciências do Comportamento da FMRP-USP.</p>
+          <p class="teaching-institution">Abril/2022</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-icon">
+            <i class="fas fa-user-md"></i>
+          </div>
+          <h3 class="teaching-title">Palestras sobre DSTs</h3>
+          <p class="teaching-description">Apresentador de palestras sobre Doenças Sexualmente Transmissíveis para escola E. E. Cônego Macário de Almeida em nome do Departamento Municipal de Saúde de Santo Antônio da Alegria.</p>
+          <p class="teaching-institution">Maio e Junho/2024</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Student Activities Section -->
+  <section id="student">
+    <div class="container">
+      <h2 class="section-title">Atividades Estudantis</h2>
+      <div class="student-content">
+        <div class="student-item">
+          <div class="student-icon">
+            <i class="fas fa-futbol"></i>
+          </div>
+          <div class="student-info">
+            <h3>Atleta da Equipe de Futsal Masculino</h3>
+            <p>Representante da FMRP-USP em competições universitárias.</p>
+            <p class="student-year">2019 - 2020</p>
+          </div>
+        </div>
+        <div class="student-item">
+          <div class="student-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="student-info">
+            <h3>Tutor do Workshop de Medicina</h3>
+            <p>Workshop de Medicina da Faculdade de Medicina de Ribeirão Preto da Universidade de São Paulo.</p>
+            <p class="student-year">2019</p>
+          </div>
+        </div>
+        <div class="student-item">
+          <div class="student-icon">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="student-info">
+            <h3>Monitor do Workshop de Medicina</h3>
+            <p>Workshop de Medicina da Faculdade de Medicina de Ribeirão Preto da Universidade de São Paulo.</p>
+            <p class="student-year">2022</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teleconsulta Section -->
+  <section id="teleconsulta">
+    <div class="container">
+      <h2 class="section-title">Teleconsulta</h2>
+      <div class="teleconsulta-content">
+        <div class="teleconsulta-info">
+          <h3>Atendimento Online Personalizado</h3>
+          <p>Agende sua teleconsulta com o Dr. Lucas Kalil e receba atendimento médico de qualidade sem sair de casa.</p>
+          <div class="teleconsulta-features">
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <p>Consultas online com total privacidade e segurança</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <p>Acesso à plataforma exclusiva para pacientes</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <p>Upload de exames e resultados</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <p>Emissão de receitas e atestados digitais</p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <p>Comunicação segura via chat integrado</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-container">
+          <h3 class="form-title">Agende sua Consulta</h3>
+          <form id="teleconsulta-form">
+            <div class="form-group">
+              <label for="name" class="form-label">Nome Completo</label>
+              <input type="text" id="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="email" class="form-label">E-mail</label>
+              <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="phone" class="form-label">Telefone</label>
+              <input type="tel" id="phone" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="date" class="form-label">Data Preferencial</label>
+              <input type="date" id="date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="time" class="form-label">Horário Preferencial</label>
+              <input type="time" id="time" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="message" class="form-label">Motivo da Consulta</label>
+              <textarea id="message" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="recaptcha">
+              <div class="recaptcha-checkbox" id="recaptcha-checkbox"></div>
+              <span class="recaptcha-text">Não sou um robô</span>
+            </div>
+            <button type="submit" class="submit-btn">Solicitar Agendamento</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-about">
+          <a href="#" class="footer-logo">Dr. <span>Lucas Kalil</span></a>
+          <p>Médico formado pela Faculdade de Medicina de Ribeirão Preto - USP, com foco em Clínica Médica e compromisso com a excelência no atendimento ao paciente.</p>
+        </div>
+        <div class="footer-links-container">
+          <h3 class="footer-title">Links Rápidos</h3>
+          <ul class="footer-links">
+            <li><a href="#hero"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="#about"><i class="fas fa-user"></i> Sobre</a></li>
+            <li><a href="#education"><i class="fas fa-graduation-cap"></i> Formação</a></li>
+            <li><a href="#residency"><i class="fas fa-hospital"></i> Residência</a></li>
+            <li><a href="#awards"><i class="fas fa-trophy"></i> Premiações</a></li>
+            <li><a href="#teleconsulta"><i class="fas fa-laptop-medical"></i> Teleconsulta</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3 class="footer-title">Contato</h3>
+          <ul class="contact-info">
+            <li>
+              <i class="fas fa-phone"></i>
+              <p>(11) 97240-8892</p>
+            </li>
+            <li>
+              <i class="fas fa-envelope"></i>
+              <p>lucasckalil12@hotmail.com</p>
+            </li>
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <p>Rua Oscar Freire, 1702, Pinheiros, São Paulo - CEP: 05409-011</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Dr. Lucas Candelaria Kalil. Todos os direitos reservados.</p>
+      </div>
+    </div>
+    <div class="ecg-container">
+      <svg width="100%" height="100%" viewBox="0 0 500 100">
+        <path class="ecg-line" d="M0,50 Q10,50 20,50 T40,50 T60,50 T80,50 T100,50 T120,50 T140,20 T160,80 T180,20 T200,80 T220,50 T240,50 T260,50 T280,50 T300,50 T320,50 T340,50 T360,50 T380,50 T400,50 T420,50"></path>
+      </svg>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  <script>
+    // Header Scroll Effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    // Mobile Navigation
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+    
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
+    });
+    
+    // Scroll Animation
+    function revealOnScroll() {
+      const elements = document.querySelectorAll('.about-info, .about-model, .timeline-item, .residency-card, .award-item, .publication-item, .teaching-card, .student-item, .teleconsulta-info, .form-container');
+      
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.classList.add('show');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+    
+    // Tabs
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
+        
+        tabBtns.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+    
+    // Floating Particles
+    function createFloatingParticles() {
+      const sections = document.querySelectorAll('section, footer');
+      
+      sections.forEach(section => {
+        const numParticles = 5;
+        
+        for (let i = 0; i < numParticles; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('floating-particle');
+          
+          const size = Math.random() * 8 + 2;
+          const posX = Math.random() * 100;
+          const posY = Math.random() * 100;
+          const duration = Math.random() * 8 + 4;
+          const delay = Math.random() * 5;
+          
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${posX}%`;
+          particle.style.top = `${posY}%`;
+          particle.style.animationDuration = `${duration}s`;
+          particle.style.animationDelay = `${delay}s`;
+          
+          section.appendChild(particle);
+        }
+      });
+    }
+    
+    createFloatingParticles();
+    
+    // Particle.js Initialization for main background
+    particlesJS('particles-js-main', {
+      particles: {
+        number: {
+          value: 100,
+          density: {
+            enable: true,
+            value_area: 1000
+          }
+        },
+        color: {
+          value: "#00eeff"
+        },
+        shape: {
+          type: "circle",
+          stroke: {
+            width: 0,
+            color: "#000000"
+          },
+          polygon: {
+            nb_sides: 5
+          }
+        },
+        opacity: {
+          value: 0.3,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 0.5,
+            opacity_min: 0.1,
+            sync: false
+          }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 1,
+            size_min: 0.1,
+            sync: false
+          }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00a8ff",
+          opacity: 0.2,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 0.5,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: {
+            enable: false,
+            rotateX: 600,
+            rotateY: 1200
+          }
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: {
+            enable: true,
+            mode: "grab"
+          },
+          onclick: {
+            enable: true,
+            mode: "push"
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 140,
+            line_linked: {
+              opacity: 0.6
+            }
+          },
+          bubble: {
+            distance: 400,
+            size: 40,
+            duration: 2,
+            opacity: 8,
+            speed: 3
+          },
+          repulse: {
+            distance: 200,
+            duration: 0.4
+          },
+          push: {
+            particles_nb: 4
+          },
+          remove: {
+            particles_nb: 2
+          }
+        }
+      },
+      retina_detect: true
+    });
+    
+    // Particle.js
+    particlesJS('particles-js', {
+      particles: {
+        number: {
+          value: 80,
+          density: {
+            enable: true,
+            value_area: 800
+          }
+        },
+        color: {
+          value: "#00eeff"
+        },
+        shape: {
+          type: "circle",
+          stroke: {
+            width: 0,
+            color: "#000000"
+          },
+          polygon: {
+            nb_sides: 5
+          }
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 1,
+            opacity_min: 0.1,
+            sync: false
+          }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 2,
+            size_min: 0.1,
+            sync: false
+          }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00a8ff",
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: {
+            enable: false,
+            rotateX: 600,
+            rotateY: 1200
+          }
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: {
+            enable: true,
+            mode: "grab"
+          },
+          onclick: {
+            enable: true,
+            mode: "push"
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 140,
+            line_linked: {
+              opacity: 1
+            }
+          },
+          bubble: {
+            distance: 400,
+            size: 40,
+            duration: 2,
+            opacity: 8,
+            speed: 3
+          },
+          repulse: {
+            distance: 200,
+            duration: 0.4
+          },
+          push: {
+            particles_nb: 4
+          },
+          remove: {
+            particles_nb: 2
+          }
+        }
+      },
+      retina_detect: true
+    });
+    
+    // Three.js DNA Model
+    function initThreeJS() {
+      const container = document.getElementById('dna-model');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      camera.position.z = 30;
+      
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(width, height);
+      renderer.setClearColor(0x000000, 0);
+      container.appendChild(renderer.domElement);
+      
+      // DNA Structure
+      const dnaGroup = new THREE.Group();
+      scene.add(dnaGroup);
+      
+      const numPoints = 40;
+      const radius = 8;
+      const height_dna = 30;
+      
+      // Create the helices
+      for (let i = 0; i < 2; i++) {
+        const points = [];
+        const material = new THREE.MeshBasicMaterial({
+          color: i === 0 ? 0x0077cc : 0x00eeff,
+          transparent: true,
+          opacity: 0.8
+        });
+        
+        for (let j = 0; j < numPoints; j++) {
+          const angle = (j / numPoints) * Math.PI * 8;
+          const x = Math.cos(angle + i * Math.PI) * radius;
+          const y = (j / numPoints) * height_dna - height_dna / 2;
+          const z = Math.sin(angle + i * Math.PI) * radius;
+          
+          points.push(new THREE.Vector3(x, y, z));
+          
+          // Add spheres at each point
+          const geometry = new THREE.SphereGeometry(0.7, 16, 16);
+          const sphere = new THREE.Mesh(geometry, material);
+          sphere.position.set(x, y, z);
+          dnaGroup.add(sphere);
+          
+          // Connect with rungs (only for one helix)
+          if (i === 0 && j % 2 === 0) {
+            const opposite_x = Math.cos(angle + Math.PI) * radius;
+            const opposite_z = Math.sin(angle + Math.PI) * radius;
+            
+            const rungGeometry = new THREE.CylinderGeometry(0.2, 0.2, radius * 2, 8);
+            const rungMaterial = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              transparent: true,
+              opacity: 0.5
+            });
+            
+            const rung = new THREE.Mesh(rungGeometry, rungMaterial);
+            rung.position.set((x + opposite_x) / 2, y, (z + opposite_z) / 2);
+            
+            // Rotate the cylinder to connect the points
+            rung.lookAt(new THREE.Vector3(opposite_x, y, opposite_z));
+            rung.rotateZ(Math.PI / 2);
+            
+            dnaGroup.add(rung);
+          }
+        }
+        
+        // Create the curve and tube for the helix backbone
+        const curve = new THREE.CatmullRomCurve3(points);
+        const tubeGeometry = new THREE.TubeGeometry(curve, numPoints, 0.4, 8, false);
+        const tube = new THREE.Mesh(tubeGeometry, material);
+        dnaGroup.add(tube);
+      }
+      
+      // Animation
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        dnaGroup.rotation.y += 0.005;
+        
+        renderer.render(scene, camera);
+      }
+      
+      animate();
+      
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+        
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        
+        renderer.setSize(newWidth, newHeight);
+      });
+    }
+    
+    // Initialize 3D model when section is visible
+    function initModelsWhenVisible() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (entry.target.id === 'dna-model') {
+              initThreeJS();
+              observer.unobserve(entry.target);
+            }
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      observer.observe(document.getElementById('dna-model'));
+    }
+    
+    window.addEventListener('load', initModelsWhenVisible);
+    
+    // Recaptcha Checkbox
+    const recaptchaCheckbox = document.getElementById('recaptcha-checkbox');
+    recaptchaCheckbox.addEventListener('click', function() {
+      this.classList.toggle('checked');
+    });
+    
+    // Form Submission
+    const teleconsultaForm = document.getElementById('teleconsulta-form');
+    teleconsultaForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const checkbox = document.getElementById('recaptcha-checkbox');
+      if (!checkbox.classList.contains('checked')) {
+        alert('Por favor, confirme que você não é um robô.');
+        return;
+      }
+      
+      alert('Solicitação de agendamento enviada com sucesso! Em breve entraremos em contato para confirmar sua teleconsulta.');
+      teleconsultaForm.reset();
+      checkbox.classList.remove('checked');
+    });
+    
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Hero Animation
+    gsap.to(".hero-content", {
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top center",
+        end: "bottom top",
+        scrub: 1
+      },
+      opacity: 0.3,
+      y: 100
+    });
+    
+    // Section titles animation
+    gsap.utils.toArray('.section-title').forEach(title => {
+      gsap.from(title, {
+        scrollTrigger: {
+          trigger: title,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse"
+        },
+        opacity: 0,
+        y: 50,
+        duration: 0.8
+      });
+    });
+  </script>
+</body>
+</html>
