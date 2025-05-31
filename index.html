@@ -12,6 +12,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <!-- SDK do EmailJS - Tentativa com múltiplas versões -->
+  <script type="text/javascript">
+    // Carregar EmailJS de forma inline como fallback
+    (function() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://cdn.emailjs.com/dist/email.min.js';
+      script.onload = function() {
+        console.log('📧 EmailJS carregado via script dinâmico');
+        if (window.emailjs) {
+          window.emailjs.init('vV7_wAIRFtT0hR5Yy');
+          window.emailjsReady = true;
+          console.log('✅ EmailJS inicializado dinamicamente');
+        }
+      };
+      script.onerror = function() {
+        console.log('📧 Script dinâmico falhou, usando métodos alternativos');
+      };
+      document.head.appendChild(script);
+    })();
+  </script>
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript">
+    // Configuração inline do EmailJS para garantir funcionamento
+    window.emailjsConfig = {
+      publicKey: 'vV7_wAIRFtT0hR5Yy',
+      serviceId: 'Teleconsulta_clientesite',
+      templateId: 'template_20a5gde'
+    };
+  </script>
   <style>
     :root {
       --primary: #0077cc;
@@ -1021,45 +1051,6 @@
       border-color: #00ff80;
     }
     
-    .recaptcha {
-      margin-bottom: 1.5rem;
-      width: 100%;
-      height: 78px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    
-    .recaptcha-checkbox {
-      width: 24px;
-      height: 24px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .recaptcha-checkbox.checked::after {
-      content: '✓';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--accent);
-      font-size: 1.2rem;
-    }
-    
-    .recaptcha-text {
-      margin-left: 1rem;
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
-    }
-    
     .submit-btn {
       width: 100%;
       padding: 1rem;
@@ -1077,6 +1068,12 @@
       background: var(--secondary);
       transform: translateY(-3px);
       box-shadow: var(--neon-glow);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
     
     /* Footer */
@@ -1321,6 +1318,53 @@
       fill: rgba(0, 238, 255, 0.1);
     }
     
+    /* Radio Group */
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .radio-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: var(--light);
+      font-size: 0.95rem;
+    }
+    
+    .radio-label input {
+      margin-right: 0.5rem;
+      accent-color: var(--accent);
+    }
+    
+    /* Success/Error Messages */
+    .form-success-message {
+      background: rgba(0, 255, 128, 0.1);
+      color: #00ff80;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-bottom: 1.5rem;
+      display: none;
+      border: 1px solid rgba(0, 255, 128, 0.3);
+    }
+    
+    .form-error-message {
+      background: rgba(255, 85, 85, 0.1);
+      color: #ff5555;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-bottom: 1.5rem;
+      display: none;
+      border: 1px solid rgba(255, 85, 85, 0.3);
+    }
+    
+    .form-success-message.show,
+    .form-error-message.show {
+      display: block;
+      animation: fadeIn 0.5s forwards;
+    }
+    
     /* Media Queries */
     @media screen and (max-width: 992px) {
       .hero-title {
@@ -1443,40 +1487,6 @@
       .publication-title {
         font-size: 1.1rem;
       }
-    }
-    
-    /* FormSubmit Success Message */
-    .radio-group {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 0.5rem;
-    }
-    
-    .radio-label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      color: var(--light);
-      font-size: 0.95rem;
-    }
-    
-    .radio-label input {
-      margin-right: 0.5rem;
-      accent-color: var(--accent);
-    }
-    
-    .form-success-message {
-      background: rgba(0, 255, 128, 0.1);
-      color: #00ff80;
-      padding: 1rem;
-      border-radius: 5px;
-      margin-bottom: 1.5rem;
-      display: none;
-    }
-    
-    .form-success-message.show {
-      display: block;
-      animation: fadeIn 0.5s forwards;
     }
   </style>
 </head>
@@ -1890,16 +1900,16 @@
         </div>
         <div class="form-container">
           <h3 class="form-title">Agende sua Consulta</h3>
+          
+          <!-- Mensagens de sucesso e erro -->
           <div id="form-success" class="form-success-message">
             <i class="fas fa-check-circle"></i> Sua solicitação foi enviada com sucesso! Entraremos em contato em breve para confirmar sua consulta.
           </div>
-          <form id="teleconsulta-form" action="https://formsubmit.co/hacker.haha.hack@gmail.com" method="POST">
-            <!-- Campos ocultos para FormSubmit.co -->
-            <input type="hidden" name="_subject" value="Nova Solicitação de Teleconsulta">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://lucaskalil.com.br/obrigado">
-            <input type="hidden" name="_template" value="table">
+          <div id="form-error" class="form-error-message">
+            <i class="fas fa-exclamation-triangle"></i> Ocorreu um erro ao enviar sua solicitação. Por favor, tente novamente.
+          </div>
 
+          <form id="teleconsulta-form">
             <div class="form-group">
               <label for="name" class="form-label">Nome Completo</label>
               <input type="text" id="name" name="name" class="form-control" required>
@@ -1928,10 +1938,6 @@
             <div class="form-group">
               <label for="city" class="form-label">Cidade/Estado</label>
               <input type="text" id="city" name="city" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="insurance" class="form-label">Convênio Médico (se houver)</label>
-              <input type="text" id="insurance" name="insurance" class="form-control">
             </div>
             <div class="form-group">
               <label for="date" class="form-label">Data Preferencial</label>
@@ -2019,8 +2025,42 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script>
+    // Inicialização simplificada e mais robusta do EmailJS
+    let emailjsReady = false;
+
+    function initEmailJS() {
+      // Verificar múltiplas variações de como o EmailJS pode estar disponível
+      const emailLib = window.emailjs || window.Email || window.EmailJS;
+      
+      if (emailLib) {
+        try {
+          emailLib.init('vV7_wAIRFtT0hR5Yy');
+          emailjsReady = true;
+          window.emailjs = emailLib; // Garantir que está na variável correta
+          console.log('✅ EmailJS carregado e inicializado');
+          return true;
+        } catch (error) {
+          console.error('❌ Erro ao inicializar EmailJS:', error);
+        }
+      }
+      return false;
+    }
+
+    // Tentar inicializar imediatamente
+    setTimeout(() => initEmailJS(), 100);
+    
+    // Tentar quando DOM carregar
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => initEmailJS(), 200);
+    });
+    
+    // Tentar quando página carregar completamente
+    window.addEventListener('load', () => {
+      setTimeout(() => initEmailJS(), 300);
+    });
+
     window.addEventListener('scroll', function() {
       const header = document.getElementById('header');
       if (window.scrollY > 50) {
@@ -2031,14 +2071,6 @@
     });
     
     window.addEventListener('DOMContentLoaded', function() {
-      if (window.location.search.includes('success')) {
-        const formSuccess = document.getElementById('form-success');
-        if (formSuccess) {
-          formSuccess.classList.add('show');
-          document.getElementById('teleconsulta').scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-      
       createSnowflakes();
     });
     
@@ -2481,14 +2513,6 @@
     
     window.addEventListener('load', initModelsWhenVisible);
     
-    // Recaptcha Checkbox - Removido, pois usamos o FormSubmit.co
-    
-    // Form Submission - Modificado para funcionar com FormSubmit.co
-    const teleconsultaForm = document.getElementById('teleconsulta-form');
-    
-    // Verificar parâmetros na URL após o envio bem-sucedido
-    // (Removido para evitar duplicação - já implementado no início do script)
-    
     // GSAP Animations
     gsap.registerPlugin(ScrollTrigger);
     
@@ -2580,27 +2604,165 @@
       });
     }
     
+    // Form Submission com EmailJS
+    const teleconsultaForm = document.getElementById('teleconsulta-form');
+    const submitBtn = teleconsultaForm.querySelector('.submit-btn');
+    const successMsg = document.getElementById('form-success');
+    const errorMsg = document.getElementById('form-error');
+    
     if (teleconsultaForm) {
       teleconsultaForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validar CPF antes do envio
         const cpfValue = cpfInput.value.replace(/\D/g, '');
         if (cpfValue.length === 11 && !isValidCPF(cpfValue)) {
-          e.preventDefault();
           cpfInput.classList.add('invalid');
           document.getElementById('cpf-error').style.display = 'block';
           cpfInput.focus();
           return false;
         }
         
-        return true;
+        // Tentar inicializar EmailJS uma última vez se necessário
+        if (!emailjsReady) {
+          initEmailJS();
+        }
+        
+        // Mostrar loading no botão
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+        
+        // Ocultar mensagens anteriores
+        successMsg.classList.remove('show');
+        errorMsg.classList.remove('show');
+        
+        // Verificar se EmailJS está disponível
+        const emailLib = window.emailjs || window.Email || window.EmailJS;
+        
+        if (emailLib && emailjsReady) {
+          // Tentar enviar via EmailJS
+          emailLib.sendForm(
+            'Teleconsulta_clientesite',
+            'template_20a5gde',
+            this
+          )
+          .then(() => {
+            // Sucesso
+            successMsg.classList.add('show');
+            teleconsultaForm.reset();
+            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Limpar classes de validação
+            document.querySelectorAll('.form-control').forEach(input => {
+              input.classList.remove('valid', 'invalid');
+            });
+          })
+          .catch(err => {
+            console.error('Erro EmailJS:', err);
+            showFallbackOptions(this);
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Solicitar Agendamento';
+          });
+        } else {
+          // EmailJS não disponível - usar fallback imediatamente
+          console.log('📧 EmailJS não disponível - usando métodos alternativos');
+          showFallbackOptions(this);
+          
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Solicitar Agendamento';
+        }
       });
     }
     
-    // Verificar parâmetros na URL após o envio bem-sucedido
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('success')) {
-      document.getElementById('form-success').classList.add('show');
-      // Rolar para o formulário
-      document.getElementById('teleconsulta').scrollIntoView({ behavior: 'smooth' });
+    // Função para mostrar opções alternativas de contato
+    function showFallbackOptions(form) {
+      const formData = new FormData(form);
+      let formDataText = 'SOLICITAÇÃO DE TELECONSULTA:\n\n';
+      
+      for (let [key, value] of formData.entries()) {
+        if (value) {
+          let label = '';
+          switch(key) {
+            case 'name': label = 'Nome'; break;
+            case 'cpf': label = 'CPF'; break;
+            case 'email': label = 'E-mail'; break;
+            case 'phone': label = 'Telefone'; break;
+            case 'age': label = 'Idade'; break;
+            case 'address': label = 'Endereço'; break;
+            case 'city': label = 'Cidade/Estado'; break;
+            case 'date': label = 'Data Preferencial'; break;
+            case 'time': label = 'Horário Preferencial'; break;
+            case 'message': label = 'Motivo da Consulta'; break;
+            case 'medical_history': label = 'Histórico Médico'; break;
+            case 'medication': label = 'Medicamentos'; break;
+            case 'returning_patient': label = 'Já foi paciente antes'; break;
+            default: label = key;
+          }
+          formDataText += `${label}: ${value}\n`;
+        }
+      }
+      
+      errorMsg.innerHTML = `
+        <div style="text-align: center; padding: 1rem;">
+          <i class="fas fa-paper-plane" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i><br>
+          <h3 style="color: var(--light); margin-bottom: 1rem;">Escolha como enviar sua solicitação:</h3>
+          
+          <div style="display: grid; gap: 1rem; margin: 1.5rem 0; max-width: 400px; margin-left: auto; margin-right: auto;">
+            <a href="mailto:lucasckalil12@hotmail.com?subject=Solicitação de Teleconsulta&body=${encodeURIComponent(formDataText)}" 
+               style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 15px 20px; border-radius: 10px; text-decoration: none; font-weight: 500; transition: transform 0.2s;"
+               onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              <i class="fas fa-envelope"></i> Enviar por Email
+            </a>
+            
+            <a href="https://wa.me/5511972408892?text=${encodeURIComponent('Olá Dr. Lucas! Gostaria de agendar uma teleconsulta:\n\n' + formDataText)}" 
+               target="_blank"
+               style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #25D366, #128C7E); color: white; padding: 15px 20px; border-radius: 10px; text-decoration: none; font-weight: 500; transition: transform 0.2s;"
+               onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+            </a>
+            
+            <button onclick="copyToClipboard(\`${formDataText.replace(/`/g, '\\`')}\`)" 
+                    style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--accent), var(--secondary)); color: var(--dark); border: none; padding: 15px 20px; border-radius: 10px; cursor: pointer; font-weight: 500; transition: transform 0.2s;"
+                    onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              <i class="fas fa-copy"></i> Copiar Dados
+            </button>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="color: rgba(255,255,255,0.8); margin: 0; font-size: 0.9rem;">
+              <i class="fas fa-phone" style="color: var(--accent);"></i> 
+              <strong>Ou ligue diretamente:</strong><br>
+              <a href="tel:+5511972408892" style="color: var(--accent); text-decoration: none; font-size: 1.1rem; font-weight: 600;">
+                (11) 97240-8892
+              </a>
+            </p>
+          </div>
+          
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 1rem;">
+            💡 Resposta garantida em até 24 horas
+          </p>
+        </div>
+      `;
+      errorMsg.classList.add('show');
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    // Função para copiar texto
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Dados copiados! Agora cole no WhatsApp ou Email.');
+      }).catch(() => {
+        // Fallback para navegadores antigos
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('✅ Dados copiados! Agora cole no WhatsApp ou Email.');
+      });
     }
     
     // Hero Animation
@@ -2628,6 +2790,23 @@
         duration: 0.8
       });
     });
+    
+    // Definir data mínima para hoje
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.min = today;
+    }
+
+    // Verificação final após 2 segundos
+    setTimeout(() => {
+      if (emailjsReady) {
+        console.log('✅ EmailJS: Funcionando perfeitamente');
+      } else {
+        console.log('📧 Sistema robusto ativo: Múltiplas opções de contato disponíveis');
+        console.log('💡 Usuários podem agendar via Email, WhatsApp ou telefone');
+      }
+    }, 2000);
   </script>
 </body>
 </html>
